@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="面向零基础用户的 Trae 中文入门教程，从下载安装到用 AI 制作个人简历。">
+  <title>Trae 小白入门教程｜从零开始做出个人简历</title>
+  <style>
+    :root {
+      --ink: #172033;
+      --muted: #657087;
+      --line: #dce2ec;
+      --paper: #ffffff;
+      --bg: #f4f7fb;
+      --blue: #3568ff;
+      --blue-deep: #234bc5;
+      --blue-soft: #e9efff;
+      --mint: #15a27a;
+      --mint-soft: #e8f8f2;
+      --orange: #f08b32;
+      --orange-soft: #fff2e5;
+      --purple: #7957d5;
+      --shadow: 0 14px 38px rgba(31, 49, 86, .09);
+      --radius: 18px;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background: var(--bg);
+      font-family: "PingFang SC", "Microsoft YaHei", system-ui, -apple-system, sans-serif;
+      line-height: 1.72;
+    }
+    button, input, textarea { font: inherit; }
+    button, a { -webkit-tap-highlight-color: transparent; }
+    a { color: var(--blue); }
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      display: flex;
+      align-items: center;
+      gap: 18px;
+      min-height: 68px;
+      padding: 10px 28px;
+      border-bottom: 1px solid rgba(220, 226, 236, .9);
+      background: rgba(255,255,255,.93);
+      backdrop-filter: blur(16px);
+    }
+    .brand { display: flex; align-items: center; gap: 10px; font-weight: 800; white-space: nowrap; }
+    .brand-mark {
+      display: grid; place-items: center; width: 36px; height: 36px; border-radius: 11px;
+      color: white; background: var(--ink); font-size: 15px; letter-spacing: -.5px;
+    }
+    .progress-wrap { flex: 1; display: flex; align-items: center; gap: 12px; max-width: 620px; margin: 0 auto; }
+    .progress-track { flex: 1; height: 8px; border-radius: 99px; background: #e8edf4; overflow: hidden; }
+    .progress-bar { width: 0; height: 100%; border-radius: inherit; background: var(--mint); transition: width .35s ease; }
+    .progress-text { color: var(--muted); font-size: 13px; white-space: nowrap; }
+    .top-action { color: var(--ink); text-decoration: none; font-size: 14px; font-weight: 700; }
+    .layout { display: grid; grid-template-columns: 252px minmax(0, 1fr); max-width: 1480px; margin: 0 auto; }
+    aside {
+      position: sticky; top: 68px; height: calc(100vh - 68px); overflow: auto;
+      padding: 28px 18px 36px 24px; border-right: 1px solid var(--line); background: #fbfcfe;
+    }
+    .aside-label { margin: 0 10px 10px; color: #9aa4b5; font-size: 11px; font-weight: 800; letter-spacing: .14em; }
+    .nav-link {
+      display: flex; align-items: center; gap: 10px; margin: 3px 0; padding: 10px 12px;
+      border-radius: 10px; color: #59657a; text-decoration: none; font-size: 14px; transition: .2s ease;
+    }
+    .nav-link:hover, .nav-link.active { color: var(--blue-deep); background: var(--blue-soft); }
+    .nav-number { display: grid; place-items: center; width: 24px; height: 24px; border: 1px solid var(--line); border-radius: 8px; font-size: 11px; font-weight: 800; background: white; }
+    .aside-card { margin-top: 24px; padding: 16px; border: 1px solid var(--line); border-radius: 14px; background: white; font-size: 13px; }
+    main { min-width: 0; padding: 44px clamp(24px, 5vw, 76px) 90px; }
+    section { max-width: 1040px; margin: 0 auto 72px; scroll-margin-top: 94px; }
+    .hero {
+      position: relative; overflow: hidden; min-height: 470px; display: grid; align-items: center;
+      padding: clamp(34px, 7vw, 76px); border-radius: 28px; color: white; background: #172033; box-shadow: var(--shadow);
+    }
+    .hero::before, .hero::after { content: ""; position: absolute; border-radius: 50%; filter: blur(2px); opacity: .75; }
+    .hero::before { width: 370px; height: 370px; right: -80px; top: -110px; background: #3568ff; }
+    .hero::after { width: 250px; height: 250px; right: 180px; bottom: -170px; background: #15a27a; }
+    .hero-content { position: relative; z-index: 2; max-width: 680px; }
+    .eyebrow { color: #9ab6ff; font-size: 13px; font-weight: 800; letter-spacing: .16em; }
+    h1 { margin: 14px 0 18px; font-size: clamp(38px, 6vw, 72px); line-height: 1.08; letter-spacing: -.045em; }
+    .hero p { max-width: 590px; margin: 0 0 28px; color: #d7dfef; font-size: 17px; }
+    .hero-meta { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 30px; }
+    .pill { display: inline-flex; align-items: center; gap: 6px; padding: 7px 11px; border-radius: 99px; background: rgba(255,255,255,.1); color: #eef3ff; font-size: 12px; }
+    .actions { display: flex; flex-wrap: wrap; gap: 12px; }
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 7px; min-height: 44px; padding: 9px 16px;
+      border: 1px solid transparent; border-radius: 11px; cursor: pointer; color: white; background: var(--blue);
+      text-decoration: none; font-weight: 750; transition: transform .15s ease, background .15s ease, border .15s ease;
+    }
+    .btn:hover { transform: translateY(-1px); background: var(--blue-deep); }
+    .btn.secondary { border-color: rgba(255,255,255,.25); background: rgba(255,255,255,.08); }
+    .btn.light { border-color: var(--line); color: var(--ink); background: white; }
+    .btn.small { min-height: 36px; padding: 6px 11px; font-size: 13px; }
+    .section-head { display: grid; grid-template-columns: 72px 1fr; gap: 20px; align-items: start; margin-bottom: 26px; }
+    .chapter-no { color: var(--blue); font: 800 42px/1 Georgia, serif; }
+    .kicker { margin-bottom: 4px; color: var(--blue); font-size: 12px; font-weight: 800; letter-spacing: .13em; }
+    h2 { margin: 0 0 7px; font-size: clamp(27px, 4vw, 40px); line-height: 1.2; letter-spacing: -.035em; }
+    .lead { margin: 0; color: var(--muted); font-size: 16px; }
+    h3 { margin: 0 0 8px; font-size: 19px; line-height: 1.35; }
+    h4 { margin: 0 0 5px; font-size: 15px; }
+    .grid { display: grid; gap: 16px; }
+    .grid.two { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .grid.three { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+    .card { padding: 22px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--paper); box-shadow: 0 6px 20px rgba(31,49,86,.04); }
+    .card p { margin: 5px 0 0; color: var(--muted); font-size: 14px; }
+    .icon-box { display: grid; place-items: center; width: 42px; height: 42px; margin-bottom: 18px; border-radius: 12px; color: var(--blue); background: var(--blue-soft); font-weight: 900; }
+    .callout { display: flex; gap: 14px; margin: 18px 0; padding: 17px 19px; border-left: 4px solid var(--blue); border-radius: 0 13px 13px 0; background: var(--blue-soft); }
+    .callout.warn { border-color: var(--orange); background: var(--orange-soft); }
+    .callout.good { border-color: var(--mint); background: var(--mint-soft); }
+    .callout strong { display: block; margin-bottom: 2px; }
+    .callout p { margin: 0; color: #4f5b70; font-size: 14px; }
+    .steps { display: grid; gap: 14px; counter-reset: step; }
+    .step { position: relative; padding: 22px 22px 22px 72px; border: 1px solid var(--line); border-radius: var(--radius); background: white; }
+    .step::before {
+      counter-increment: step; content: counter(step); position: absolute; left: 20px; top: 21px;
+      display: grid; place-items: center; width: 34px; height: 34px; border-radius: 10px; color: white; background: var(--ink); font-weight: 800;
+    }
+    .step p { margin: 4px 0; color: var(--muted); font-size: 14px; }
+    .download-card { display: flex; justify-content: space-between; align-items: center; gap: 22px; padding: 24px; border-radius: 18px; color: white; background: var(--blue); }
+    .download-card h3 { margin: 0; font-size: 22px; }
+    .download-card p { margin: 3px 0 0; color: #dbe5ff; }
+    .download-card .btn { color: var(--blue-deep); background: white; }
+    .checklist { display: grid; gap: 9px; padding: 0; list-style: none; }
+    .check {
+      display: flex; align-items: flex-start; gap: 11px; padding: 13px 14px; border: 1px solid var(--line); border-radius: 12px;
+      cursor: pointer; background: white; transition: .2s ease;
+    }
+    .check:hover { border-color: #b7c7f6; }
+    .check.done { border-color: #b9e5d7; background: var(--mint-soft); }
+    .check input { width: 18px; height: 18px; margin-top: 3px; accent-color: var(--mint); }
+    .check span { flex: 1; }
+    .check b { display: block; font-size: 14px; }
+    .check small { color: var(--muted); }
+    .prompt-box { position: relative; margin-top: 14px; padding: 19px 54px 19px 19px; border: 1px solid #cfd8e8; border-radius: 14px; background: #f7f9fc; color: #354158; font: 14px/1.75 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; white-space: pre-wrap; }
+    .copy-btn { position: absolute; right: 10px; top: 10px; padding: 6px 9px; border: 1px solid var(--line); border-radius: 8px; color: var(--muted); background: white; cursor: pointer; font: 12px system-ui; }
+    .tabs { border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; background: white; }
+    .tab-buttons { display: flex; overflow-x: auto; gap: 4px; padding: 8px; border-bottom: 1px solid var(--line); background: #f8fafc; }
+    .tab-btn { padding: 10px 14px; border: 0; border-radius: 9px; color: var(--muted); background: transparent; cursor: pointer; white-space: nowrap; font-weight: 700; }
+    .tab-btn.active { color: var(--blue-deep); background: white; box-shadow: 0 2px 8px rgba(31,49,86,.08); }
+    .tab-panel { display: none; padding: 24px; }
+    .tab-panel.active { display: block; }
+    .case-meta { display: flex; flex-wrap: wrap; gap: 8px; margin: 12px 0; }
+    .case-meta span { padding: 4px 9px; border-radius: 99px; color: #526078; background: #edf1f6; font-size: 12px; }
+    details { border: 1px solid var(--line); border-radius: 13px; background: white; }
+    details + details { margin-top: 9px; }
+    summary { padding: 15px 17px; cursor: pointer; font-weight: 750; }
+    details > div { padding: 0 17px 17px; color: var(--muted); font-size: 14px; }
+    code { padding: 2px 5px; border-radius: 5px; background: #edf1f6; color: #34415a; }
+    .resume-lab { display: grid; grid-template-columns: minmax(0, .82fr) minmax(0, 1.18fr); gap: 18px; align-items: start; }
+    .form-card { padding: 22px; border: 1px solid var(--line); border-radius: var(--radius); background: white; }
+    label { display: block; margin: 13px 0 5px; color: #4f5b70; font-size: 13px; font-weight: 750; }
+    input, textarea { width: 100%; padding: 10px 12px; border: 1px solid #ccd5e3; border-radius: 9px; outline: 0; color: var(--ink); background: white; }
+    textarea { min-height: 88px; resize: vertical; }
+    input:focus, textarea:focus { border-color: var(--blue); box-shadow: 0 0 0 3px var(--blue-soft); }
+    .resume-paper { min-height: 700px; padding: 38px; border: 1px solid var(--line); border-radius: 4px; background: white; box-shadow: var(--shadow); }
+    .resume-paper h3 { margin: 0; font-size: 29px; }
+    .resume-title { color: var(--blue); font-weight: 750; }
+    .resume-contact { margin: 7px 0 22px; color: var(--muted); font-size: 12px; }
+    .resume-paper h4 { margin: 20px 0 8px; padding-bottom: 5px; border-bottom: 2px solid var(--ink); font-size: 13px; letter-spacing: .1em; }
+    .resume-paper p { margin: 5px 0; color: #414c60; font-size: 13px; }
+    .resume-tip { margin-top: 14px; padding: 14px; border-radius: 12px; background: var(--orange-soft); font-size: 13px; color: #765128; }
+    .method { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; }
+    .method-item { padding: 17px 13px; border-radius: 15px; color: white; background: var(--ink); }
+    .method-item:nth-child(2) { background: var(--blue); }
+    .method-item:nth-child(3) { background: var(--purple); }
+    .method-item:nth-child(4) { background: var(--mint); }
+    .method-item:nth-child(5) { background: var(--orange); }
+    .method-item b { display: block; margin-bottom: 5px; font-size: 21px; }
+    .method-item span { font-size: 12px; opacity: .88; }
+    .footer { max-width: 1040px; margin: 0 auto; padding-top: 20px; border-top: 1px solid var(--line); color: var(--muted); font-size: 12px; }
+    .toast { position: fixed; right: 22px; bottom: 22px; z-index: 50; transform: translateY(80px); opacity: 0; padding: 11px 15px; border-radius: 10px; color: white; background: var(--ink); transition: .25s ease; }
+    .toast.show { transform: translateY(0); opacity: 1; }
+    .mobile-menu { display: none; border: 0; border-radius: 8px; background: var(--blue-soft); color: var(--blue-deep); padding: 7px 9px; cursor: pointer; }
+    @media (max-width: 1000px) {
+      .layout { display: block; }
+      aside { position: fixed; left: -280px; top: 68px; z-index: 25; width: 270px; transition: left .25s ease; box-shadow: var(--shadow); }
+      aside.open { left: 0; }
+      .mobile-menu { display: block; }
+      .top-action { display: none; }
+      main { padding: 28px 20px 70px; }
+      .resume-lab { grid-template-columns: 1fr; }
+      .method { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 700px) {
+      .topbar { padding: 10px 14px; }
+      .brand span { display: none; }
+      .progress-text { display: none; }
+      .hero { min-height: 450px; padding: 30px 24px; border-radius: 20px; }
+      .grid.two, .grid.three { grid-template-columns: 1fr; }
+      .section-head { grid-template-columns: 1fr; gap: 8px; }
+      .chapter-no { font-size: 28px; }
+      .download-card { align-items: flex-start; flex-direction: column; }
+      .method { grid-template-columns: 1fr; }
+      .resume-paper { padding: 25px; }
+    }
+    @media print {
+      .topbar, aside, .form-card, .section-head, .resume-tip, .footer, .print-hide { display: none !important; }
+      body, main, section { margin: 0; padding: 0; background: white; }
+      section:not(#resume) { display: none; }
+      .resume-lab { display: block; }
+      .resume-paper { border: 0; box-shadow: none; min-height: auto; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <button class="mobile-menu" id="menuBtn" aria-label="打开目录">目录</button>
+    <div class="brand"><div class="brand-mark">TR</div><span>Trae 小白训练营</span></div>
+    <div class="progress-wrap">
+      <div class="progress-track"><div class="progress-bar" id="progressBar"></div></div>
+      <span class="progress-text" id="progressText">学习进度 0%</span>
+    </div>
+    <a class="top-action" href="#resume">直达简历实战 →</a>
+  </header>
+
+  <div class="layout">
+    <aside id="sidebar">
+      <p class="aside-label">学习路线</p>
+      <nav>
+        <a class="nav-link active" href="#start"><span class="nav-number">00</span>开始之前</a>
+        <a class="nav-link" href="#download"><span class="nav-number">01</span>下载与安装</a>
+        <a class="nav-link" href="#first-project"><span class="nav-number">02</span>第一次使用</a>
+        <a class="nav-link" href="#prompt"><span class="nav-number">03</span>学会和 AI 沟通</a>
+        <a class="nav-link" href="#cases"><span class="nav-number">04</span>三个小案例</a>
+        <a class="nav-link" href="#debug"><span class="nav-number">05</span>遇到问题怎么办</a>
+        <a class="nav-link" href="#resume"><span class="nav-number">06</span>简历实战</a>
+        <a class="nav-link" href="#summary"><span class="nav-number">07</span>方法总结</a>
+      </nav>
+      <div class="aside-card">
+        <b>预计用时：90 分钟</b><br>
+        不要求会编程。每完成一个动作，就勾选对应打卡项，进度会自动保存在浏览器里。
+      </div>
+    </aside>
+
+    <main>
+      <section id="start">
+        <div class="hero">
+          <div class="hero-content">
+            <div class="eyebrow">从零开始 · 边做边学</div>
+            <h1>用 Trae，做出你的第一份 AI 简历</h1>
+            <p>不用先学代码。你只需要学会把想法说清楚，让 AI 帮你创建文件、修改页面、解决报错，并一步步完成作品。</p>
+            <div class="hero-meta">
+              <span class="pill">✓ 完全零基础</span><span class="pill">✓ 单人可完成</span><span class="pill">✓ 有成品</span><span class="pill">✓ 可随时重做</span>
+            </div>
+            <div class="actions">
+              <a class="btn" href="#download">开始第 1 步</a>
+              <a class="btn secondary" href="#summary">先看方法总结</a>
+            </div>
+          </div>
+        </div>
+        <div class="callout good">
+          <div>目标</div>
+          <div><strong>学完后你能独立完成什么？</strong><p>你能用一句话启动项目、让 AI 修改页面、看懂基本报错，并制作一份可以打开、修改和打印的个人简历网页。</p></div>
+        </div>
+        <div class="grid three">
+          <div class="card"><div class="icon-box">1</div><h3>你负责说清需求</h3><p>告诉 AI 想做什么、给谁用、要有什么内容。</p></div>
+          <div class="card"><div class="icon-box">2</div><h3>Trae 负责动手</h3><p>生成代码、创建文件、运行项目、帮你定位问题。</p></div>
+          <div class="card"><div class="icon-box">3</div><h3>你负责检查结果</h3><p>点一点、看一看，不满意就继续描述修改。</p></div>
+        </div>
+      </section>
+
+      <section id="download">
+        <div class="section-head"><div class="chapter-no">01</div><div><div class="kicker">准备工具</div><h2>下载并安装 Trae</h2><p class="lead">只从官方网站下载。安装过程和普通软件一样，不需要额外配置。</p></div></div>
+        <div class="download-card">
+          <div><h3>Trae 官方下载</h3><p>进入官网后，选择与你电脑对应的 Windows 或 macOS 版本。</p></div>
+          <a class="btn" href="https://www.trae.cn/" target="_blank" rel="noopener">打开官方下载页 ↗</a>
+        </div>
+        <div class="callout warn">
+          <div>注意</div>
+          <div><strong>不要从陌生网盘或软件下载站安装</strong><p>第三方安装包可能版本过旧，也可能包含额外软件。官网地址应为 <code>trae.cn</code>。</p></div>
+        </div>
+        <div class="grid two" style="margin-bottom:18px">
+          <a class="card" href="https://docs.trae.ai/ide/what-is-trae-ide" target="_blank" rel="noopener" style="text-decoration:none;color:inherit"><h3>官方使用文档 ↗</h3><p>查看产品介绍、功能说明和更完整的使用指引。</p></a>
+          <a class="card" href="https://forum.trae.cn/" target="_blank" rel="noopener" style="text-decoration:none;color:inherit"><h3>Trae 官方社区 ↗</h3><p>查看新手教程、案例分享与常见问题讨论。</p></a>
+        </div>
+        <div class="steps">
+          <div class="step"><h3>选择电脑版本</h3><p>Windows 用户下载 Windows 版；苹果电脑下载 macOS 版。苹果电脑如果询问芯片版本，可在“关于本机”里查看。</p></div>
+          <div class="step"><h3>完成安装并打开</h3><p>按照安装提示继续。第一次打开时，如系统询问文件访问权限，允许 Trae 访问你准备存放练习的文件夹。</p></div>
+          <div class="step"><h3>登录并认识界面</h3><p>登录后先找到三个区域：左侧“文件”、中间“编辑区”、右侧“AI 对话/Builder”。暂时不需要理解其他按钮。</p></div>
+        </div>
+        <ul class="checklist">
+          <li class="check"><input type="checkbox"><span><b>我已从官网下载并安装 Trae</b><small>完成后勾选</small></span></li>
+          <li class="check"><input type="checkbox"><span><b>我已打开 Trae，并完成登录</b><small>能看到编辑器主界面即可</small></span></li>
+          <li class="check"><input type="checkbox"><span><b>我找到了文件区、编辑区和 AI 对话区</b><small>记不住名称没关系，知道大概位置就行</small></span></li>
+        </ul>
+      </section>
+
+      <section id="first-project">
+        <div class="section-head"><div class="chapter-no">02</div><div><div class="kicker">第一次动手</div><h2>让 AI 帮你创建第一个网页</h2><p class="lead">第一次练习只做一张“自我介绍卡片”，重点是体验完整流程。</p></div></div>
+        <div class="steps">
+          <div class="step"><h3>创建练习文件夹</h3><p>在桌面新建文件夹，命名为 <code>我的AI练习</code>。在 Trae 中选择“打开文件夹”，打开它。</p></div>
+          <div class="step"><h3>打开 Builder / AI 对话</h3><p>找到右侧 AI 区域，选择 Builder 模式。如果界面名称略有变化，找到能“根据描述创建项目”的对话入口即可。</p></div>
+          <div class="step"><h3>复制下面的第一条提示词</h3><p>粘贴后发送。AI 可能会先给出方案，再创建文件。看到确认按钮时，阅读内容后允许执行。</p></div>
+        </div>
+        <div class="prompt-box">请在当前文件夹中制作一个单文件 HTML 自我介绍网页。
+要求：
+1. 页面中央是一张简洁的个人卡片；
+2. 内容包括姓名“小夏”、一句自我介绍、三个兴趣标签；
+3. 有一个“联系我”按钮，点击后弹出“很高兴认识你”；
+4. 使用温暖的浅色风格；
+5. 完成后告诉我如何预览页面。<button class="copy-btn">复制</button></div>
+        <div class="callout">
+          <div>观察</div>
+          <div><strong>你不需要逐行看懂代码</strong><p>先检查结果是否符合五条要求。按钮能不能点？文字对不对？颜色是否舒服？这就是你此时最重要的工作。</p></div>
+        </div>
+        <ul class="checklist">
+          <li class="check"><input type="checkbox"><span><b>AI 已经创建了 HTML 文件</b><small>左侧文件列表里能看到以 .html 结尾的文件</small></span></li>
+          <li class="check"><input type="checkbox"><span><b>我已经在浏览器预览页面</b><small>可双击 HTML 文件，或使用 Trae 提供的预览/运行入口</small></span></li>
+          <li class="check"><input type="checkbox"><span><b>“联系我”按钮可以点击</b><small>如果不能，直接告诉 AI：“按钮点击没有反应，请检查并修复”</small></span></li>
+        </ul>
+      </section>
+
+      <section id="prompt">
+        <div class="section-head"><div class="chapter-no">03</div><div><div class="kicker">核心能力</div><h2>学会用“五句话”给 AI 下任务</h2><p class="lead">提示词不需要华丽，但必须具体。按下面顺序说，AI 会更容易一次做对。</p></div></div>
+        <div class="method">
+          <div class="method-item"><b>目标</b><span>你要做什么？</span></div>
+          <div class="method-item"><b>用户</b><span>给谁使用？</span></div>
+          <div class="method-item"><b>内容</b><span>必须有什么？</span></div>
+          <div class="method-item"><b>样式</b><span>看起来怎样？</span></div>
+          <div class="method-item"><b>验收</b><span>怎样算完成？</span></div>
+        </div>
+        <div class="grid two" style="margin-top:16px">
+          <div class="card"><h3>不够清楚的说法</h3><div class="prompt-box">帮我做一个好看的简历。<button class="copy-btn">复制</button></div><p>“好看”没有标准，“简历”里有哪些内容也没有说。</p></div>
+          <div class="card"><h3>更容易成功的说法</h3><div class="prompt-box">为准备求职的新媒体运营新人制作一个单页网页简历。包含个人简介、技能、两个项目经历和联系方式。风格干净、专业、米白色。手机也能正常查看，所有按钮可点击。<button class="copy-btn">复制</button></div></div>
+        </div>
+        <details style="margin-top:16px"><summary>AI 做得不满意，应该怎样继续说？</summary><div>一次只改一类问题，并说清改哪里。例如：“保留所有内容，只把顶部区域改得更简洁；姓名更醒目；联系方式放在姓名下方；不要修改项目经历。”</div></details>
+        <details><summary>怎样避免 AI 自己编造内容？</summary><div>明确写：“信息不足的地方先用【待补充】标记，不要编造公司、数据、奖项和工作经历。”制作简历时尤其重要。</div></details>
+        <details><summary>不知道专业词汇，也能描述吗？</summary><div>可以。用日常语言描述你看到的问题，例如：“手机上文字挤在一起”“按钮颜色太淡，看不清”“两边空白不一样宽”。</div></details>
+      </section>
+
+      <section id="cases">
+        <div class="section-head"><div class="chapter-no">04</div><div><div class="kicker">小场景练习</div><h2>完成三个递进案例</h2><p class="lead">每个案例都练一项关键能力。建议按顺序做，不需要追求完美。</p></div></div>
+        <div class="tabs">
+          <div class="tab-buttons">
+            <button class="tab-btn active" data-tab="case1">案例 A：待办清单</button>
+            <button class="tab-btn" data-tab="case2">案例 B：旅行预算</button>
+            <button class="tab-btn" data-tab="case3">案例 C：作品集页面</button>
+          </div>
+          <div class="tab-panel active" id="case1">
+            <h3>待办清单：练习“让按钮真的工作”</h3>
+            <div class="case-meta"><span>预计 15 分钟</span><span>难度 ★</span><span>重点：交互</span></div>
+            <div class="prompt-box">请制作一个单文件 HTML 待办清单。用户可以输入任务并添加，点击任务可以标记完成，还可以删除任务。刷新页面后任务仍然保留。页面要简洁，并显示“已完成数量 / 总数量”。完成后请自行检查每个按钮是否有效。<button class="copy-btn">复制</button></div>
+            <div class="resume-tip">验收：添加 3 条任务 → 完成 1 条 → 删除 1 条 → 刷新浏览器，剩余任务仍在。</div>
+          </div>
+          <div class="tab-panel" id="case2">
+            <h3>旅行预算：练习“让 AI 处理数据”</h3>
+            <div class="case-meta"><span>预计 20 分钟</span><span>难度 ★★</span><span>重点：计算</span></div>
+            <div class="prompt-box">请制作一个旅行预算计算器。用户可以输入交通、住宿、餐饮、门票和其他费用，页面自动计算总费用，并按 3 人平均分摊。输入内容变化时立即更新结果。金额统一保留两位小数。请加入“清空”按钮，并检查计算是否正确。<button class="copy-btn">复制</button></div>
+            <div class="resume-tip">验收：输入交通 600、住宿 900、餐饮 300，其他为 0；总计应为 1800，人均应为 600。</div>
+          </div>
+          <div class="tab-panel" id="case3">
+            <h3>作品集页面：练习“根据反馈反复修改”</h3>
+            <div class="case-meta"><span>预计 25 分钟</span><span>难度 ★★</span><span>重点：迭代</span></div>
+            <div class="prompt-box">请制作一个新媒体运营新人作品集网页。包含个人介绍、三个作品卡片、擅长平台、联系方式。先使用示例内容，但所有示例文字都标记为【请替换】。风格专业、活泼，手机和电脑都能正常查看。每个作品卡片有“查看详情”按钮，点击后展示该作品说明。<button class="copy-btn">复制</button></div>
+            <div class="resume-tip">第二轮修改练习：“保留现有功能，把页面改得更专业；减少颜色数量；让三个作品卡片高度一致；手机上每行只显示一张卡片。”</div>
+          </div>
+        </div>
+        <ul class="checklist" style="margin-top:16px">
+          <li class="check"><input type="checkbox"><span><b>我完成了至少一个小案例</b><small>亲自点击检查功能，不只看页面截图</small></span></li>
+          <li class="check"><input type="checkbox"><span><b>我给 AI 提出过至少两次修改意见</b><small>练习“保留什么、修改什么、怎样算改好”</small></span></li>
+        </ul>
+      </section>
+
+      <section id="debug">
+        <div class="section-head"><div class="chapter-no">05</div><div><div class="kicker">排错方法</div><h2>遇到问题，不要慌，也不要乱点</h2><p class="lead">把现象和报错交给 AI，再让它小范围修复。你不需要自己猜原因。</p></div></div>
+        <div class="grid two">
+          <div class="card"><div class="icon-box">A</div><h3>页面打不开</h3><p>告诉 AI：“请检查当前项目，页面无法打开。先找出原因，再修复，并告诉我正确的预览方式。”</p></div>
+          <div class="card"><div class="icon-box">B</div><h3>按钮没反应</h3><p>告诉 AI 是哪个按钮、你点击后期待发生什么、现在发生了什么。</p></div>
+          <div class="card"><div class="icon-box">C</div><h3>出现红色报错</h3><p>完整复制报错文字给 AI，不要只说“报错了”。让 AI 修复后解释一句原因。</p></div>
+          <div class="card"><div class="icon-box">D</div><h3>越改越乱</h3><p>让 AI 停止新增功能，先恢复最近可用的版本，或要求只修改一个具体区域。</p></div>
+        </div>
+        <div class="prompt-box">当前出现了问题：
+【我做了什么】我点击了“添加任务”按钮。
+【我期待的结果】新任务出现在列表中。
+【实际结果】点击后没有任何变化。
+请先检查原因，只修复这个问题，不要改变页面样式。修复后请告诉我如何验证。<button class="copy-btn">复制</button></div>
+      </section>
+
+      <section id="resume">
+        <div class="section-head"><div class="chapter-no">06</div><div><div class="kicker">最终实战</div><h2>用 AI 制作一份真实个人简历</h2><p class="lead">先整理事实，再让 AI 帮你表达和排版。不要让 AI 编造经历。</p></div></div>
+        <div class="callout warn">
+          <div>原则</div>
+          <div><strong>AI 可以润色，不能代替真实经历</strong><p>姓名、联系方式、公司、学校、项目、数据都必须由你核对。个人隐私不要发送给不可信的平台或陌生人。</p></div>
+        </div>
+        <div class="steps">
+          <div class="step"><h3>准备原始资料</h3><p>写下目标岗位、教育经历、工作/实习经历、项目、技能和联系方式。没有的数据写“待补充”。</p></div>
+          <div class="step"><h3>让 AI 先整理文字</h3><p>不要立刻做页面。先让 AI 发现信息缺口、提出问题，再将经历改成简洁、有行动和结果的表达。</p></div>
+          <div class="step"><h3>让 AI 创建简历网页</h3><p>文字确认无误后，再要求生成单页 HTML 简历，并在手机、电脑和打印场景中检查。</p></div>
+        </div>
+        <div class="prompt-box">你是一名严谨的简历编辑。请根据我随后提供的真实资料，帮我整理一份应聘【目标岗位】的中文简历。
+规则：
+1. 先列出缺失信息并向我提问，不要立刻编写简历；
+2. 不得编造公司、项目、职责、数据、技能或奖项；
+3. 每段经历优先使用“做了什么 + 如何做 + 结果”的表达；
+4. 不确定的信息标记为【待确认】；
+5. 我确认文字后，再创建一个单文件 HTML 简历；
+6. 简历为一页、专业、清晰，支持手机查看和打印为 PDF。<button class="copy-btn">复制</button></div>
+
+        <h3 style="margin-top:30px">先在这里体验“资料 → 简历”的过程</h3>
+        <p class="lead" style="margin-bottom:16px">填写左侧资料，右侧会形成一个简单预览。你可以把整理好的内容复制给 Trae，让它继续美化和完善。</p>
+        <div class="resume-lab">
+          <div class="form-card print-hide">
+            <h3>我的真实资料</h3>
+            <label for="rName">姓名</label><input id="rName" value="小夏">
+            <label for="rRole">目标岗位</label><input id="rRole" value="新媒体运营">
+            <label for="rContact">联系方式</label><input id="rContact" value="邮箱：example@email.com ｜ 手机：【待补充】">
+            <label for="rIntro">个人简介</label><textarea id="rIntro">热爱内容创作，擅长把复杂信息整理成清晰、有吸引力的表达。</textarea>
+            <label for="rSkill">技能（用顿号分隔）</label><input id="rSkill" value="内容策划、图文编辑、数据复盘、AI 工具">
+            <label for="rProject">项目经历</label><textarea id="rProject">【项目名称】：负责选题整理与内容发布；通过复盘优化标题和发布时间；结果数据【待补充】。</textarea>
+            <div class="actions" style="margin-top:16px">
+              <button class="btn small" id="updateResume">更新预览</button>
+              <button class="btn light small" id="copyResumePrompt">复制给 Trae 的提示词</button>
+              <button class="btn light small" onclick="window.print()">打印 / 存为 PDF</button>
+            </div>
+          </div>
+          <article class="resume-paper" id="resumePaper">
+            <h3 id="pName">小夏</h3>
+            <div class="resume-title" id="pRole">新媒体运营</div>
+            <div class="resume-contact" id="pContact">邮箱：example@email.com ｜ 手机：【待补充】</div>
+            <h4>个人简介</h4><p id="pIntro">热爱内容创作，擅长把复杂信息整理成清晰、有吸引力的表达。</p>
+            <h4>核心技能</h4><p id="pSkill">内容策划、图文编辑、数据复盘、AI 工具</p>
+            <h4>项目经历</h4><p id="pProject">【项目名称】：负责选题整理与内容发布；通过复盘优化标题和发布时间；结果数据【待补充】。</p>
+            <h4>教育 / 工作经历</h4><p>【请根据真实情况补充】</p>
+          </article>
+        </div>
+        <div class="resume-tip">最终检查：所有事实真实吗？有没有错别字？联系方式正确吗？手机上能看吗？打印预览是否控制在一页？请至少请一位朋友帮你复核。</div>
+        <ul class="checklist" style="margin-top:16px">
+          <li class="check"><input type="checkbox"><span><b>我已整理真实简历资料，并标出待补充项</b></span></li>
+          <li class="check"><input type="checkbox"><span><b>我已让 AI 提问并润色，而不是编造内容</b></span></li>
+          <li class="check"><input type="checkbox"><span><b>我已在 Trae 中生成并检查简历网页</b></span></li>
+          <li class="check"><input type="checkbox"><span><b>我已检查手机显示，并打印 / 保存为 PDF</b></span></li>
+        </ul>
+      </section>
+
+      <section id="summary">
+        <div class="section-head"><div class="chapter-no">07</div><div><div class="kicker">带走这套方法</div><h2>以后使用 Trae，只记住这五步</h2><p class="lead">工具界面会更新，但这套工作方式一直有效。</p></div></div>
+        <div class="method">
+          <div class="method-item"><b>1. 说</b><span>把目标和限制说具体</span></div>
+          <div class="method-item"><b>2. 看</b><span>先看方案，再允许执行</span></div>
+          <div class="method-item"><b>3. 跑</b><span>打开成品，亲自点击</span></div>
+          <div class="method-item"><b>4. 改</b><span>一次只改一类问题</span></div>
+          <div class="method-item"><b>5. 验</b><span>按清单检查并保存</span></div>
+        </div>
+        <div class="grid two" style="margin-top:18px">
+          <div class="card"><h3>每次任务的万能开场</h3><div class="prompt-box">我要制作【作品】给【用户】使用。
+必须包含【内容 / 功能】。
+风格希望是【样式】。
+请先给出简短计划，再开始制作。
+完成后请检查【验收条件】，并告诉我如何预览。<button class="copy-btn">复制</button></div></div>
+          <div class="card"><h3>每次修改的万能说法</h3><div class="prompt-box">保留【不要改变的内容】。
+现在只修改【具体区域 / 问题】。
+我希望它变成【明确结果】。
+不要新增其他功能。
+修改后请检查【验证动作】。<button class="copy-btn">复制</button></div></div>
+        </div>
+        <div class="callout good">
+          <div>完成</div>
+          <div><strong>真正学会的标准，不是看懂所有代码</strong><p>而是你能独立描述需求、启动任务、检查作品、提出修改，并在 AI 犯错时把它拉回正确方向。</p></div>
+        </div>
+        <div class="actions">
+          <a class="btn" href="#start">回到开头复习</a>
+          <button class="btn light" id="resetProgress">清空学习进度</button>
+          <a class="btn light" href="https://juejin.cn/user/2436173525322903" target="_blank" rel="noopener">查看 Trae 官方社区教程 ↗</a>
+        </div>
+      </section>
+
+      <footer class="footer">
+        <p>教程中的外部链接指向 Trae 官网与官方社区。产品界面可能随版本更新而变化，请以实际页面为准。链接核对日期：2026-06-08。</p>
+      </footer>
+    </main>
+  </div>
+  <div class="toast" id="toast">已复制</div>
+
+  <script>
+    const checks = [...document.querySelectorAll('.check input')];
+    const progressBar = document.getElementById('progressBar');
+    const progressText = document.getElementById('progressText');
+    const toast = document.getElementById('toast');
+
+    function showToast(message) {
+      toast.textContent = message;
+      toast.classList.add('show');
+      clearTimeout(window.toastTimer);
+      window.toastTimer = setTimeout(() => toast.classList.remove('show'), 1800);
+    }
+
+    async function copyText(text) {
+      try {
+        await navigator.clipboard.writeText(text);
+      } catch (error) {
+        const helper = document.createElement('textarea');
+        helper.value = text;
+        helper.style.position = 'fixed';
+        helper.style.opacity = '0';
+        document.body.appendChild(helper);
+        helper.select();
+        document.execCommand('copy');
+        helper.remove();
+      }
+    }
+
+    function updateProgress() {
+      checks.forEach(input => input.closest('.check').classList.toggle('done', input.checked));
+      const done = checks.filter(input => input.checked).length;
+      const percent = Math.round(done / checks.length * 100);
+      progressBar.style.width = percent + '%';
+      progressText.textContent = `学习进度 ${percent}%（${done}/${checks.length}）`;
+      localStorage.setItem('traeTutorialProgress', JSON.stringify(checks.map(input => input.checked)));
+      if (percent === 100) showToast('全部完成，恭喜你完成训练！');
+    }
+
+    const saved = JSON.parse(localStorage.getItem('traeTutorialProgress') || '[]');
+    checks.forEach((input, index) => {
+      input.checked = Boolean(saved[index]);
+      input.addEventListener('change', updateProgress);
+    });
+    updateProgress();
+
+    document.querySelectorAll('.copy-btn').forEach(button => {
+      button.addEventListener('click', async () => {
+        const text = button.parentElement.innerText.replace('复制', '').trim();
+        await copyText(text);
+        button.textContent = '已复制';
+        showToast('提示词已复制');
+        setTimeout(() => button.textContent = '复制', 1300);
+      });
+    });
+
+    document.querySelectorAll('.tab-btn').forEach(button => {
+      button.addEventListener('click', () => {
+        document.querySelectorAll('.tab-btn, .tab-panel').forEach(item => item.classList.remove('active'));
+        button.classList.add('active');
+        document.getElementById(button.dataset.tab).classList.add('active');
+      });
+    });
+
+    const resumeFields = ['Name', 'Role', 'Contact', 'Intro', 'Skill', 'Project'];
+    function updateResume() {
+      resumeFields.forEach(field => {
+        document.getElementById('p' + field).textContent = document.getElementById('r' + field).value || '【待补充】';
+      });
+      showToast('简历预览已更新');
+    }
+    document.getElementById('updateResume').addEventListener('click', updateResume);
+
+    document.getElementById('copyResumePrompt').addEventListener('click', async () => {
+      updateResume();
+      const content = resumeFields.map(field => `${document.querySelector('label[for="r' + field + '"]').textContent}：${document.getElementById('r' + field).value || '【待补充】'}`).join('\n');
+      const prompt = `请根据以下真实资料制作一份单文件 HTML 中文简历。不得编造信息，缺失项保留【待补充】。页面要专业、清晰、适合目标岗位，支持手机查看和打印为一页 PDF。完成后请检查错别字、按钮和打印效果。\n\n${content}`;
+      await copyText(prompt);
+      showToast('已复制给 Trae 的完整提示词');
+    });
+
+    document.getElementById('resetProgress').addEventListener('click', () => {
+      if (confirm('确定要清空所有打卡进度吗？')) {
+        checks.forEach(input => input.checked = false);
+        updateProgress();
+        showToast('学习进度已清空');
+      }
+    });
+
+    const navLinks = [...document.querySelectorAll('.nav-link')];
+    const sections = [...document.querySelectorAll('main section')];
+    const observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          navLinks.forEach(link => link.classList.toggle('active', link.getAttribute('href') === '#' + entry.target.id));
+        }
+      });
+    }, { rootMargin: '-25% 0px -65% 0px' });
+    sections.forEach(section => observer.observe(section));
+
+    const sidebar = document.getElementById('sidebar');
+    document.getElementById('menuBtn').addEventListener('click', () => sidebar.classList.toggle('open'));
+    navLinks.forEach(link => link.addEventListener('click', () => sidebar.classList.remove('open')));
+  </script>
+</body>
+</html>
