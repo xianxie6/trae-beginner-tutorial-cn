@@ -2,6 +2,10 @@
 
 面向完全零基础用户的中文交互教程，从下载安装到使用 Trae 完成个人简历。
 
+## 在线访问
+
+https://trae-beginner-tutorial-cn.pages.dev
+
 ## 内容
 
 - Trae 官方下载、文档与社区入口
@@ -12,4 +16,3 @@
 - 学习打卡与进度自动保存
 
 打开 `index.html` 即可本地使用。
-
